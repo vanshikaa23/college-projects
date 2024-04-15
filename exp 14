@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+
+class MenuItem {
+protected:
+    std::string name;
+    double price;
+public:
+    MenuItem(std::string n, double p) : name(n), price(p) {}
+    virtual double getPrice() const {
+        return price;
+    }
+};
+
+class FoodItem : public MenuItem {
+public:
+    FoodItem(std::string n, double p) : MenuItem(n, p) {}
+    double getPrice() const override {
+        return price * 1.1;
+    }
+};
+
+class DrinkItem : public MenuItem {
+public:
+    DrinkItem(std::string n, double p) : MenuItem(n, p) {}
+    double getPrice() const override {
+        
+        return price * 1.05;
+    }
+};
+
+class Order {
+private:
+    std::vector<MenuItem*> items;
+public:
+    void addItem(MenuItem* item) {
+        items.push_back(item);
+    }
+
+    double calculateTotal() const {
+        double total = 0.0;
+        for (auto item : items) {
+            total += item->getPrice();
+        }
+        return total;
+    }
+};
+
+int main() {
+    FoodItem burger("Burger", 5.99);
+    DrinkItem coke("Coke", 1.99);
+
+    Order order;
+    order.addItem(&burger);
+    order.addItem(&coke);
+
+    std::cout << "Total bill: $" << order.calculateTotal() << std::endl;
+
+    return 0;
+}
